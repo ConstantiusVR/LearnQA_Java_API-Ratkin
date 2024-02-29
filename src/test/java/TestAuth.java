@@ -24,7 +24,7 @@ public class TestAuth {
 
         do {
             password = passwords[i];
-            System.out.println(password);
+//            System.out.println(password);
 
             Map<String, Object> enterData = new HashMap<>();
             enterData.put("login", "super_admin");
@@ -49,9 +49,10 @@ public class TestAuth {
                     .andReturn();
 
 
-            if (Objects.equals(response2.getBody().toString(), "You are authorized")){
+            if (Objects.equals(response2.getBody().asString(), "You are authorized")){
                 response2.prettyPrint();
                 System.out.println("your password is: " + password);
+                break;
             }
 
             i++;
