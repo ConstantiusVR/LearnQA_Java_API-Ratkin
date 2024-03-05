@@ -3,11 +3,10 @@ import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class UserAgent {
 
@@ -20,33 +19,36 @@ public class UserAgent {
 
     public void testAgent(String name) {
 
-int i=0;
+int i = 0;
 
 do {
-    Map<String, String> params = new HashMap<>();
-    params.put("user_agent", name);
+    Map<String, String> headers = new HashMap<>();
+    headers.put("user-agent", name);
 
     JsonPath response = RestAssured
             .given()
-            .queryParams(params)
+            .headers(headers)
             .get("https://playground.learnqa.ru/ajax/api/user_agent_check")
             .jsonPath();
 
     String platform = response.getString("platform");
     String browser = response.getString("browser");
     String device = response.getString("device");
-    String answer = platform + " " + browser + " " + device + " ";
+    String answer = "platform" + ": " + platform + ", " + "browser" + ": " + browser + ", " + "device" + ": " + device;
 
-    String[] expectedValues = new String[]{"platform': 'Mobile', 'browser': 'No', 'device': 'Android",
-            "platform': 'Mobile', 'browser': 'Chrome', 'device': 'iOS",
-            "platform': 'Googlebot', 'browser': 'Unknown', 'device': 'Unknown",
-            "platform': 'Web', 'browser': 'Chrome', 'device': 'No",
-            "platform': 'Mobile', 'browser': 'No', 'device': 'iPhone"};
+
+    String[] expectedValues = new String[]{
+            "platform: Mobile, browser: No, device: Android",
+            "platform: Mobile, browser: Chrome, device: iOS",
+            "platform: Googlebot, browser: Unknown, device: Unknown",
+            "platform: Web, browser: Chrome, device: No",
+            "platform: Mobile, browser: No, device: iPhone"};
 
 
     assertEquals(expectedValues[i], answer, "Unexpected values");
-} while (true);
+    i++;
 
+} while (true);
 
 
 
